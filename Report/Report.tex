@@ -1,0 +1,162 @@
+%\documentclass[journal]{IEEEtran}
+\documentclass[draftcls,onecolumn,12pt]{IEEEtran}
+\IEEEoverridecommandlockouts
+%\overrideIEEEmargins
+
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage[compress]{natbib}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{algcompatible}
+\usepackage{algorithm}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{epstopdf}
+\usepackage{color}
+\usepackage{bbm}
+\usepackage{needspace}
+\usepackage{color, colortbl}
+\usepackage[english]{babel}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{subcaption}
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{positioning}
+\usepackage{filecontents}
+
+\DeclareCaptionFont{mysize}{\fontsize{8}{9.6}\selectfont}
+\captionsetup{font=mysize}
+
+\pagenumbering{gobble}
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicsinfectionpath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation can
+% be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
+% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+% *** MATH PACKAGES ***
+%
+%\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics. If using
+% it, be sure to load this package with the cmex10 option to ensure that
+% only type 1 fonts will utilized at all point sizes. Without this option,
+% it is possible that some math symbols, particularly those within
+% footnotes, will be rendered in bitmap form which will result in a
+% document that can not be IEEE Xplore compliant!
+%
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+
+\addtolength{\textwidth}{-6mm}
+\addtolength{\hoffset}{3mm}
+\addtolength{\textheight}{-0mm}
+\addtolength{\voffset}{4mm}
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+  \theoremstyle{plain}
+  \newtheorem{lem}[thm]{\protect\lemmaname}
+\newtheorem{remark}{Remark}
+\newtheorem{coro}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{define}{Definition}
+\newtheorem{problem}{Problem}
+
+
+\makeatother
+
+\usepackage{babel}
+\providecommand{\lemmaname}{Lemma}
+\providecommand{\theoremname}{Theorem}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\newcommand{\Sysbi}{$\mathcal B(\bar A,\bar B)$}
+\newcommand{\Digraph}{$G(\bar A,\bar B)$}
+
+\renewcommand{\thesubsubsection}{\alph{subsubsection})}
+%\renewcommand{\baselinestretch}{1.5}
+
+
+\begin{document}
+\title{PID Control Project}
+\author{Ximing Chen}
+\maketitle
+\section{Goals}\label{sec:prelim}
+The goal of this project is to implement a PID controller to control a vehicle in virtual environment to prevent it from driving off the road.
+
+\section{PID Basics and Tuning}
+\subsection{Preliminaries on PID Control}
+Proportional, integral, and derivative controller is often used in industry as a feedback control mechanism. More specifically, the controller $u(t)$ leverages the past trajectory of the system in the following form:
+\begin{equation}
+u(t) = K_p e(t) + K_i \int_{0}^t e(\tau) d \tau + K_d \dfrac{de(t)}{dt},
+\end{equation}
+where $e(t)$ is the difference/error between the actual trajectory and the desired trajectory. In discrete-time, the above equation writes:
+\begin{equation}
+u[k] = K_pe[k] + K_i \sum_{\ell = 0}^{k} e[\ell] + K_d \left(e[k] - e[k-1]\right).
+\end{equation}
+
+The term $K_p$ governs that the system is moving towards the desired trajectory. For example, consider a 1-D system with reference trajectory $y(t) \equiv 0.$ In this case, when the state $x(t)$ is positive, the error is positive. Subsequently, a negative feedback will drive $x(t)$ towards zero, vise versa. In particular, a larger $K_p$ aims to drive $x(t)$ to desired trajectory as quick as possible. 
+
+The term $K_d$ decides how much the system is overshooting. The introduction of $K_d$ arises because of following reason. Notice that when only $K_p$ term is used. Then, even when the error is small, the system may drive across the desired trajectory due to momentum of the system. Subsequently, one may expect that the trajectory oscillates around the desired trajectory when only $K_p$ is used. Introducing $K_d$ term efficiently mitigates such defects as it measures the ``speed'' of the system. When the system moves ``slowly'', it is expected that the system operates around the desired trajectory, whereas when the system deters from the desired trajectory by a large amount, then a large control should be used.
+
+The term $K_i$ ensures convergence to the steady state. Notice that given a desired trajectory $y(t)$ one can consider $e(t) = x(t) - y(t).$ When there is system bias, using only $K_p$ and $K_d$ cannot drive the system towards exact trajectory. However, if the system has constant error, i.e., does not operate at the desired trajectory, then these constant error will accumulate overtime. We then leverage them to construct a control signal to indicate the system to move towards $y(t).$ In other words, when the accumulated error is large enough, the integral error becomes significant in the control signal.
+
+
+\subsection{Selecting PID Parameters}
+From the above analysis, we see that $K_p$ and $K_d$ decides whether the system can operate around the desired trajectory efficiently and asymptotically. Subsequently, we first set $K_i = 0.$ On the other hand, as we want less oscillations around desired trajectory, we set $K_d > K_p.$ In the project, I manually tried initializing $K_d \approx 2.5$ and $K_p \approx 0.5.$ 
+
+From the simulation, I observed that the car oscillates vastly and drives off the road when turning. This indicates that $K_p$ is probably too large. Therefore, I tried a grid-search idea on $(K_p, K_d)$ and found the working parameter set.
+
+Another possible automatic way of implement this is to use twiddle. The steps of twiddle is described as follows:
+\begin{enumerate}
+\item Set a counter on how many iterations should we evaluate the current parameter set;
+\item Compute the total error using the sums-of-squares of $\mathtt{cte}$ obtained from the program;
+\item Adjust using twiddle on a single parameter, e.g., $K_p$ first and $K_d$ second. The change on these parameters are set to be around $0.1$ of the original values.
+\end{enumerate}
+\end{document}
+
