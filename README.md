@@ -1,5 +1,9 @@
 # CarND-Controls-PID
-Self-Driving Car Engineer Nanodegree Program
+The goal of the project is to design and implement PID control algorithms. Please see Report.pdf for detailed description of the procedures and results. 
+
+
+
+
 
 ---
 
